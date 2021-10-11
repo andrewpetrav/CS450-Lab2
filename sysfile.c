@@ -442,3 +442,33 @@ sys_pipe(void)
   fd[1] = fd1;
   return 0;
 }
+
+int counts[20];
+bool flag=0; //0 if not initialized, 1 if initialized
+
+void updateCount(int trapno){
+	struct proc *curproc = myproc();
+	if(flag==0){ //if unintialized
+		for (int i=0; i<20; i++){
+			curproc->trapCount[i]=0; //init all calls to 0
+		}
+	}
+	flag=1; //set the flag
+
+	curproc->trapCount[trapno]++; //incremement 
+}
+
+int countTraps(void){
+	struct proc *curproc=myproc();
+
+
+	int * counts2;
+	int size;
+	argint(1,&size);
+	argptr(0, (void*)&counts2,size);
+	
+	for(int i=0; i<20; i++){
+		counts2[i]=curproc->trapCount[i];
+	}
+	return 0;
+}
