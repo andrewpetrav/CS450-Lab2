@@ -32,6 +32,7 @@ idtinit(void)
   lidt(idt, sizeof(idt));
 }
 
+void updateCount(int trap);
 //PAGEBREAK: 41
 void
 trap(struct trapframe *tf)
@@ -45,7 +46,8 @@ trap(struct trapframe *tf)
       exit();
     return;
   }
-
+  updateCount(tf->trapno);
+  
   switch(tf->trapno){
   case T_IRQ0 + IRQ_TIMER:
     if(cpuid() == 0){
