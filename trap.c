@@ -33,6 +33,9 @@ idtinit(void)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 2718b1a4fcf75acf8ef7ce323216e0e62dfacb4c
 extern int carray[20];
 struct spinlock lock;
 bool init=0;
@@ -53,10 +56,14 @@ trap(struct trapframe *tf)
     return;
   }
 <<<<<<< HEAD
+<<<<<<< HEAD
    
 =======
 
 >>>>>>> parent of 9e7caa1... Added updatecount in trap function
+=======
+   
+>>>>>>> 2718b1a4fcf75acf8ef7ce323216e0e62dfacb4c
   switch(tf->trapno){
   case T_IRQ0 + IRQ_TIMER:
     if(cpuid() == 0){
