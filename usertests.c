@@ -1745,6 +1745,29 @@ rand()
   return randstate;
 }
 
+void counttrapstest(void){
+	int n=20; //number of traps
+	int counts[n];
+	countTraps(counts, n);
+	printf(stdout, "countTraps test\n");
+	for(int i=1; i<n; i++){
+		printf(stdout, "Trap #%d: %d\n", i, counts[i]);
+	}
+	
+	printf(stdout, "Count Traps for Parent Process");
+
+	int pid=fork(); //create a child process
+	if(pid==0){
+		close(12);
+		exit();
+	}
+	wait();
+	close(11);
+	for(int i=1; i<n; i++){
+		printf(stdout, "Trap #%d: %d\n", i, counts[i]);
+	}
+
+}
 int
 main(int argc, char *argv[])
 {
@@ -1755,7 +1778,8 @@ main(int argc, char *argv[])
     exit();
   }
   close(open("usertests.ran", O_CREATE));
-
+ 
+  counttrapstest();
   argptest();
   createdelete();
   linkunlink();
@@ -1796,7 +1820,6 @@ main(int argc, char *argv[])
   bigdir(); // slow
 
   uio();
-
   exectest();
 
   exit();
