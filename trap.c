@@ -7,7 +7,7 @@
 #include "x86.h"
 #include "traps.h"
 #include "spinlock.h"
-
+#include <stdbool.h>
 // Interrupt descriptor table (shared by all CPUs).
 struct gatedesc idt[256];
 extern uint vectors[];  // in vectors.S: array of 256 entry pointers
@@ -32,6 +32,9 @@ idtinit(void)
   lidt(idt, sizeof(idt));
 }
 
+extern int carray[20];
+struct spinlock lock;
+bool init=0;
 void updateCount(int trap);
 //PAGEBREAK: 41
 void
@@ -46,8 +49,7 @@ trap(struct trapframe *tf)
       exit();
     return;
   }
-  updateCount(tf->trapno);
-  
+   
   switch(tf->trapno){
   case T_IRQ0 + IRQ_TIMER:
     if(cpuid() == 0){
@@ -82,6 +84,7 @@ trap(struct trapframe *tf)
 
   //PAGEBREAK: 13
   default:
+    updateCount(tf->trapno);
     if(myproc() == 0 || (tf->cs&3) == 0){
       // In kernel, it must be our mistake.
       cprintf("unexpected trap %d from cpu %d eip %x (cr2=0x%x)\n",
